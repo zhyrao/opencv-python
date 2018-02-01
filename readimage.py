@@ -17,9 +17,11 @@ import cv2
 img = cv2.imread('logo.png', 0) # 确认图片存在
 
 while True:
-	cv2.imshow('gray', img)
+	cv2.imshow('gray', img) # show image with  a window named 'gray'
 
+	# any key while trigger this
 	if cv2.waitKey(0):
 		break
 
+# remeber to destroy windows.
 cv2.destroyAllWindows()
