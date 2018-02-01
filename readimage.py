@@ -14,14 +14,12 @@ import cv2
 # 注意： 可以传递 1, 0, -1来代表这3中方式
 
 # load an color image in grayscale
-img = cv2.imread('logo.png', 0) # 确认图片存在
+img = cv2.imread('logo.png', 0) # 确认图片存在 如果路径不对，不会出错，但是返回None
 
 while True:
-	cv2.imshow('gray', img) # show image with  a window named 'gray'
+	cv2.imshow('gray', img)
 
-	# any key while trigger this
 	if cv2.waitKey(0):
 		break
 
-# remeber to destroy windows.
 cv2.destroyAllWindows()
