@@ -28,7 +28,7 @@ out = cv2.VideoWriter('output.avi', fourcc, 30, (640, 480), True)
 while cap.isOpened():
 	ret, frame = cap.read()
 	if ret:
-		frame = cv2.flip(frame, 0) # frame is fliped cv2.flip(src, flipCode) vertical: 0 horizontal:1 both:-1
+		#frame = cv2.flip(frame, 0) # frame is fliped cv2.flip(src, flipCode) vertical: 0 horizontal:1 both:-1
 
 		out.write(frame)
 		cv2.imshow('video', frame)
