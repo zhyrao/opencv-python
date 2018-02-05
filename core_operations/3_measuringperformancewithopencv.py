@@ -38,3 +38,6 @@ print(elapsedTime)
 
 # 性能优化技术：
 	# 1：避免使用loop循环，特别是嵌套2-3层loop循环
+	# 2：Vectorize the algorithm/code to the maximum possible extent because Numpy and OpenCV are optimized for vector operations.
+	# 3：Exploit the cache coherence.
+	# 4：Never make copies of array unless it is needed. Try to use views instead. Array copying is a costly operation.
