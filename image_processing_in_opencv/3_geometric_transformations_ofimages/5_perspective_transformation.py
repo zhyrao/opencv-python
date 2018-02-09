@@ -14,7 +14,9 @@ from matplotlib import pyplot as plt
 # 为了得到透视变换矩阵，你需要 源图片 上的4个位置点，以及相应的输出图片上的4个位置点。
 # 这4个点中，不能有3点及3点以上共线
 
-# cv2.getPerspectiveTransform()
+# retval = cv.getPerspectiveTransform(src, dst)
+# returns 3x3 perspective transformation for the corresponding 4 point pairs.
+
 
 img = cv2.imread('sudokusmall.jpg',)
 rows, cols, channels = img.shape
