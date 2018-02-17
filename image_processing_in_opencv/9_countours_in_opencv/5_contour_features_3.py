@@ -27,3 +27,8 @@ import cv2
 				# 下标。
 
 # hull = cv2.convexHull(cnt)
+
+
+# Checking Convexity
+# 函数作用是来检测轮廓是否是凸包， cv2.isContourConvex().
+# 返回为True 或者False
