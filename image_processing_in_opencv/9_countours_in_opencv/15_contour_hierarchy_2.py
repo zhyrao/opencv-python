@@ -49,11 +49,23 @@ ret, thresh = cv2.threshold(img_Gray, 127, 255, 0)
 
 	# 那么在图像中，只有3个轮廓信息是最外层的
 	# 轮廓信息。轮廓 0，1，2。
-img_contour, coutours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, 0)
+# img_contour, coutours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, 0)
+# print(hierarchy)
+	# [[[ 1 -1 -1 -1]
+	#     [ 2  0 -1 -1]
+	#     [-1  1 -1 -1]]]
+
+
+# 3. RETR_CCOMP
+	# 这种模式下面，将返回所有的轮廓信息，并且将他们
+	# 组织成为2层级的结构形式。例如，外层的轮廓信息
+	# 是属于第一层级结构的。内部的轮廓信息是属于第二
+	# 层级结构的。如果在第二层中物体还有包含的物体，
+	# 那么将这个被包含的物体为第一层级结构。以此类推
+
+img_contour, coutours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, 1)
 print(hierarchy)
-# [[[ 1 -1 -1 -1]
-#     [ 2  0 -1 -1]
-#     [-1  1 -1 -1]]]
+
 
 cv2.imshow('img_contour',img_contour)
 
