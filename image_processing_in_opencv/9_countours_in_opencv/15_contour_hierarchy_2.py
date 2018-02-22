@@ -63,9 +63,16 @@ ret, thresh = cv2.threshold(img_Gray, 127, 255, 0)
 	# 层级结构的。如果在第二层中物体还有包含的物体，
 	# 那么将这个被包含的物体为第一层级结构。以此类推
 
-img_contour, coutours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, 1)
-print(hierarchy)
+# img_contour, coutours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, 1)
+# print(hierarchy)
 
+
+# 4. RETR_TREE
+	# 最后这种模式是具有详细层级结构关系的模式。它返回了
+	# 所有的轮廓并且将它们进行父子关系组合为树状结构。
+
+img_contour, coutours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, 1)
+print(hierarchy)
 
 cv2.imshow('img_contour',img_contour)
 
