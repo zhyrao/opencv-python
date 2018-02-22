@@ -24,23 +24,36 @@ ret, thresh = cv2.threshold(img_Gray, 127, 255, 0)
 	# -1.但是显而易见的是，next和previous
 	# 是有值的。
 
-# img_contour, coutours, hierarchy = cv2.findContours(thresh, 2, cv2.RETR_LIST)
+# img_contour, coutours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, 0)
 # print(hierarchy)
 
-#    [[[ 1, -1, -1, -1],
-#         [ 2,  0, -1, -1],
-#         [ 3,  1, -1, -1],
-#         [ 4,  2, -1, -1],
-#         [ 5,  3, -1, -1],
-#         [ 6,  4, -1, -1],
-#         [ 7,  5, -1, -1],
-#         [-1,  6, -1, -1]]]
+	#    [[[ 1, -1, -1, -1],
+	#         [ 2,  0, -1, -1],
+	#         [ 3,  1, -1, -1],
+	#         [ 4,  2, -1, -1],
+	#         [ 5,  3, -1, -1],
+	#         [ 6,  4, -1, -1],
+	#         [ 7,  5, -1, -1],
+	#         [-1,  6, -1, -1]]]
 	#  在这里，每一行代表一个轮廓的信息。
 	# 第一行代表了轮廓-0的信息，其中下一个
 	# 节点为轮廓1.没有上一个节点，所有
 	# previous = -1。 以此类推
 
+# 2. RETR_EXTERNAL 
+	# 如果使用了这个模式，仅仅返回了最外层的
+	# 轮廓信息(最顶层的轮廓信息，所有的子节点
+	# 信息都遗弃)。可以这么说，在这种模式下面，
+	# 我们仅仅关心最外层的（最顶层的）信息，
+	# 其他的信息不管。
 
+	# 那么在图像中，只有3个轮廓信息是最外层的
+	# 轮廓信息。轮廓 0，1，2。
+img_contour, coutours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, 0)
+print(hierarchy)
+# [[[ 1 -1 -1 -1]
+#     [ 2  0 -1 -1]
+#     [-1  1 -1 -1]]]
 
 cv2.imshow('img_contour',img_contour)
 
