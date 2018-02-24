@@ -40,6 +40,8 @@ cv2.imshow('hist1',hist1)
 # 2D Histogram in Numpy
 	# 在Numpy中也提供了特定的函数: 
 		# np.histogram2d()
+		# 第一个参数是H数据，第二个是S数据，
+		#第三个是区间个数, 第四个是区间范围
 		
 # img = cv2.imread('tower.jpg')
 # hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
