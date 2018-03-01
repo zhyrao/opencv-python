@@ -65,3 +65,43 @@ import cv2
 	# 线。
 	#link：https://opencv-python-tutroals.readthedocs.io/en/latest/_images/houghlines2.jpg
 
+# Hough Transform in OpenCV
+	# 上面解释的内容全部被opencv的函数,cv2.HoughLines()包含。
+	# 它简单的返回了一个数组包含(p,θ)的值。p的单位是像素，θ
+	# 的单位是弧度。
+	# 第一个参数是一个二值化的源图像，所以在霍夫变换之间，我们
+	# 需要将图像做阈值化或者做canny边界检测。
+	# 第二和第三个参数分别代表了p和θ的精度。
+	# 第四个参数是阈值，它表示了被认为是一条线的最低累加值。
+	# 记住累加的数值决定于线上的点的个数。所以这个值也表示了
+	# 最低多长的线段会被检测到。
+
+img = cv2.imread('sudoku.jpg')
+img_o = img.copy()
+cv2.imshow("original img", img_o)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+edges = cv2.Canny(gray, 50, 150, apertureSize = 3)
+
+lines = cv2.HoughLines(edges, 1, np.pi/180, 120)
+for line in lines:
+	print(line)
+	rho, theta = line[0][0], line[0][1]
+	a = np.cos(theta)
+	b = np.sin(theta)
+	x0 = a * rho
+	y0 = b*rho
+	x1 = int(x0 + 1000*(-b))
+	y1 = int(y0 + 1000*(a))
+	x2 = int(x0 - 1000*(-b))
+	y2 = int(y0 - 1000*(a))
+
+	cv2.line(img, (x1,y1), (x2,y2), (0,0,255),2)
+
+cv2.imshow("original img", img_o)
+cv2.imshow("gray img", gray)
+cv2.imshow("edge  img", edges)
+cv2.imshow("line img", img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
