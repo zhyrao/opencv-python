@@ -97,13 +97,33 @@ bgdModel = np.zeros((1,65),np.float64)
 fgdModel = np.zeros((1,65), np.float64)
 
 rect = (50, 50, 450, 290)
-cv2.grabCut(img, mask, rect,bgdModel,fgdModel, 5, cv2.GC_INIT_WITH_RECT)
+# cv2.grabCut(img, mask, rect,bgdModel,fgdModel, 5, cv2.GC_INIT_WITH_RECT)
 
-mask2 = np.where((mask ==2) | (mask ==0), 0, 1).astype('uint8')
-img = img * mask2[:,:,np.newaxis]
-cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-
+# mask2 = np.where((mask ==2) | (mask ==0), 0, 1).astype('uint8')
+# img = img * mask2[:,:,np.newaxis]
+# cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+	
 cv2.imshow('img',img)
+
+	# 但是Messi的头发不见了！没人喜欢光头messi，所以我们需要
+	# 将他的头发找回来。我们将会给头发的位置一个修补，将像素标
+	# 记为（确定前景）1；同时，有一些我们不想要得地面也存在，
+	# 还有logo标记。我们需要去除这些。那么这些将会标记为0（确定
+	# 背景）
+# newmask is the mask image I manually labelled
+newmask = cv2.imread('newmask.png',0)
+
+# whereever it is marked white (sure foreground), change mask=1
+# whereever it is marked black (sure background), change mask=0
+mask[newmask == 0] = 0
+mask[newmask == 255] = 1
+cv2.imshow('newmask',newmask)
+mask, bgdModel, fgdModel = cv2.grabCut(img,mask,None,bgdModel,fgdModel,5,cv2.GC_INIT_WITH_MASK)
+
+mask = np.where((mask==2)|(mask==0),0,1).astype('uint8')
+img = img*mask[:,:,np.newaxis]
+
+cv2.imshow('img1',img)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
