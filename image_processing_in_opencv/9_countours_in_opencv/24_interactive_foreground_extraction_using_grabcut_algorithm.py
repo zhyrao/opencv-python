@@ -67,4 +67,43 @@ from matplotlib import pyplot as plt
 
 		# img link:http://www.cs.ru.ac.za/research/g02m1682/
 
-		
+
+# Demo
+	# 现在来看看在OpenCV中的 grabcut算法。cv2.grabCut()这个函数就是
+	# 使用这个算法的，先看看参数：
+		# img -- 源图像
+		# mask -- 这是一个掩码图像，其中我们指定了哪些是背景，哪些是前景
+			# 哪些可能是前景，哪些可能是背景。这里是用flag来表示的：
+			# cv2.GC_BGD, cv2.GC_FGD, cv2.GC_PR_BGD, cv2.GC_PR_FGD.
+			# 或者简单的使用0,1,2,3来表示。
+		# rect -- 这是表示在图像中前景的矩形(x,y,w,h)
+		# bdgModel, fgdModel -- 这些是在算法内部使用的数据，只需要创建
+			# 大小为（1,65）类型为np.float64的全部为0数组
+		# iterCount -- 算法应该运行的迭代次数
+		# mode -- 是否在图像中绘制矩形或者笔画 cv2.GC_INIT_WITH_RECT
+			# cv2.GC_INIT_WITH_MASK 
+
+	# 首先来看看矩形模式。先加载图像，然后创建一个遮罩图像，创建fgdMode和
+	# bgdModel.给出矩形的参数。运行迭代5次。Mode应该是cv2.GC_INIT_WITH_RECT,
+	# 然后运行grabcut。这样它会修改遮罩图像。在新的遮罩图像中，像素将会被
+	# 上面给定的4个方式标记。所以我们修改这个图像，让标记为0和2的像素标记为0（
+	# 作为背景），像素标记为1和3的标记为1（作为前景）。现在最终的遮罩图像已经
+	# 准备好了，只需要将它和源图像相乘就能得到分割后的图像
+
+img = cv2.imread('messi5.jpg')
+mask = np.zeros(img.shape[:2], np.uint8)
+
+bgdModel = np.zeros((1,65),np.float64)
+fgdModel = np.zeros((1,65), np.float64)
+
+rect = (50, 50, 450, 290)
+cv2.grabCut(img, mask, rect,bgdModel,fgdModel, 5, cv2.GC_INIT_WITH_RECT)
+
+mask2 = np.where((mask ==2) | (mask ==0), 0, 1).astype('uint8')
+img = img * mask2[:,:,np.newaxis]
+cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+
+cv2.imshow('img',img)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
