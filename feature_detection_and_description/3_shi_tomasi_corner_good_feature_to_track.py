@@ -24,6 +24,13 @@ from matplotlib import pyplot as plt
 
 	# 如果这个值比阈值高，那么就会被认为是一个角点
 
+# Code
+	# OpenCV中有函数 cv2.goodFeaturesToTrack(). 它通过shi-tomas
+	# 方式（或者特别指定harris方式）在图像中找到N个最强强度的角点。
+	# 跟通常一样，输入图像是灰度图。然后指定想要找到的角点的数量。再
+	# 指定质量水平，0-1之间的值，这个值表示如果角点的质量水平值小于
+	# 这个值将都会被拒绝。最后在指定角点之间的最小欧几里得距离值。
+	
 
 img = cv2.imread('sample.jpg')
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
