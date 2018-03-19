@@ -42,16 +42,16 @@ from matplotlib import pyplot as plt
 	# 同样的为了避免低强度的光线造成的错误值，低强度的光将会被cv.inRange()
 	# 抛弃。
 
-cap = cv2.VideoCapture('slow.mp4')
+cap = cv2.VideoCapture('slow_traffic_small.mp4')
 
 # take first frame of the video
 ret, frame = cap.read()
-plt.imshow(frame)
-plt.title('frame0')
-plt.show()
+# plt.imshow(frame)
+# plt.title('frame0')
+# plt.show()
 
 # setup initial locations of window
-r,h,c,w = 265,20,80,80# simple hardcode the values
+r,h,c,w = 200,20,300,50# simple hardcode the values
 track_window = (c,r,w,h)
 
 # set up ROI for tracking
@@ -64,7 +64,7 @@ cv2.normalize(roi_hist,roi_hist,0,255,cv2.NORM_MINMAX)
 # setup the termination criteria, either 10 iteration or move by at least 1 pt
 term_crit = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
 
-while True:
+while (1):
 	ret, frame = cap.read()
 
 	if (ret == True):
