@@ -72,11 +72,36 @@ import cv2
 	# 跟上个例子一样，我们需要创建一个背景去除物体对象，在这里，你可以有
 	# 一个额外的选项就是是否检测阴影。如果detectShadows = True(默认True)
 	# 它会检测和遮罩阴影，但是会降低速度。阴影将会被标记为灰色。
+# cap = cv2.VideoCapture('vtest.avi')
+# fgbg = cv2.createBackgroundSubtractorMOG2()
+# while(1):
+#     ret, frame = cap.read()
+#     fgmask = fgbg.apply(frame)
+#     cv2.imshow('frame',fgmask)
+#     k = cv2.waitKey(30) & 0xff
+#     if k == 27:
+#         break
+# cap.release()
+# cv2.destroyAllWindows()
+
+# BackgroundSubtractorGMG
+	# 这个算法结合了统计图像背景估计及单像素贝叶斯分割。在2012年提出。
+
+	# 它使用了最前面的一些帧图像做背景建模（一般是120帧）。它使用了贝
+	# 叶斯推理的概率前景物体分割来识别可能的前景物体。预估是可调节的。
+	# 新的观察在权重上重于旧的观察的权重。还有一些形态的变换比如扩展
+	# 和闭合会被使用来消除一些噪声。在前面的一些帧中，你可能会看到只是
+	# 黑色的图像。
+
+	# 最好是在结果中使用形态扩张来移除噪声
+
 cap = cv2.VideoCapture('vtest.avi')
-fgbg = cv2.createBackgroundSubtractorMOG2()
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
+fgbg = cv2.bgsegm.createBackgroundSubtractorGMG()
 while(1):
     ret, frame = cap.read()
     fgmask = fgbg.apply(frame)
+    fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
     cv2.imshow('frame',fgmask)
     k = cv2.waitKey(30) & 0xff
     if k == 27:
