@@ -45,22 +45,41 @@ import cv2
 	# 阈值等等。它会将这些参数都设置为默认的。然后在视频的循环中，使用函数
 	# backgroundsubtractor.apply()来获取背景图的掩码图。
 
+# cap = cv2.VideoCapture('vtest.avi')
+# fgbg = cv2.createBackgroundSubtractorMOG()
+
+# while (1):
+# 	ret, frame = cap.read()
+
+# 	if ret == False:
+# 		break
+
+# 	fgmask = fgbg.apply(frame)
+# 	cv2.imshow('frame',fgmask)
+
+# 	k = cv2.waitKey(30) &0xff
+# 	if k == 27:
+# 		break
+
+# cv2.destroyAllWindows()
+# cap.release()
+
+# BackgroundSubtractorMOG2
+	# 这个方法也是一样的。但是一个很重要的特性就是它为每个像素选定了一个
+	# 适当的高斯分布（在上个例子中，整个算法都贯穿使用了K高斯混合）。它
+	# 对于环境中的光线变化给予了更好的结果。
+
+	# 跟上个例子一样，我们需要创建一个背景去除物体对象，在这里，你可以有
+	# 一个额外的选项就是是否检测阴影。如果detectShadows = True(默认True)
+	# 它会检测和遮罩阴影，但是会降低速度。阴影将会被标记为灰色。
 cap = cv2.VideoCapture('vtest.avi')
-fgbg = cv2.createBackgroundSubtractorMOG()
-
-while (1):
-	ret, frame = cap.read()
-
-	if ret == False:
-		break
-
-	fgmask = fgbg.apply(frame)
-	cv2.imshow('frame',fgmask)
-
-	k = cv2.waitKey(30) &0xff
-	if k == 27:
-		break
-
-cv2.destroyAllWindows()
+fgbg = cv2.createBackgroundSubtractorMOG2()
+while(1):
+    ret, frame = cap.read()
+    fgmask = fgbg.apply(frame)
+    cv2.imshow('frame',fgmask)
+    k = cv2.waitKey(30) & 0xff
+    if k == 27:
+        break
 cap.release()
-
+cv2.destroyAllWindows()
