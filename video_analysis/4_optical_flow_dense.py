@@ -17,7 +17,6 @@ import cv2 as cv
 	# 下面的例子显示了怎么使用上述的算法来找到稠密的光流。我们有
 	# 个2个通道的数组，里面是光流向量(u,v)。我们找到他们的方向和
 	# 长度。为了更好的显示，我们将结果颜色化。
-
 cap  = cv.VideoCapture('vtest.avi')
 
 ret,frame1 = cap.read()

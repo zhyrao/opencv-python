@@ -45,24 +45,24 @@ import cv2
 	# 阈值等等。它会将这些参数都设置为默认的。然后在视频的循环中，使用函数
 	# backgroundsubtractor.apply()来获取背景图的掩码图。
 
-# cap = cv2.VideoCapture('vtest.avi')
-# fgbg = cv2.createBackgroundSubtractorMOG()
+cap = cv2.VideoCapture('vtest.avi')
+fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
 
-# while (1):
-# 	ret, frame = cap.read()
+while (1):
+	ret, frame = cap.read()
 
-# 	if ret == False:
-# 		break
+	if ret == False:
+		break
 
-# 	fgmask = fgbg.apply(frame)
-# 	cv2.imshow('frame',fgmask)
+	fgmask = fgbg.apply(frame)
+	cv2.imshow('frame',fgmask)
 
-# 	k = cv2.waitKey(30) &0xff
-# 	if k == 27:
-# 		break
+	k = cv2.waitKey(30) &0xff
+	if k == 27:
+		break
 
-# cv2.destroyAllWindows()
-# cap.release()
+cv2.destroyAllWindows()
+cap.release()
 
 # BackgroundSubtractorMOG2
 	# 这个方法也是一样的。但是一个很重要的特性就是它为每个像素选定了一个
@@ -95,16 +95,16 @@ import cv2
 
 	# 最好是在结果中使用形态扩张来移除噪声
 
-cap = cv2.VideoCapture('vtest.avi')
-kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
-fgbg = cv2.bgsegm.createBackgroundSubtractorGMG()
-while(1):
-    ret, frame = cap.read()
-    fgmask = fgbg.apply(frame)
-    fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
-    cv2.imshow('frame',fgmask)
-    k = cv2.waitKey(30) & 0xff
-    if k == 27:
-        break
-cap.release()
-cv2.destroyAllWindows()
+# cap = cv2.VideoCapture('vtest.avi')
+# kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
+# fgbg = cv2.bgsegm.createBackgroundSubtractorGMG()
+# while(1):
+#     ret, frame = cap.read()
+#     fgmask = fgbg.apply(frame)
+#     fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
+#     cv2.imshow('frame',fgmask)
+#     k = cv2.waitKey(30) & 0xff
+#     if k == 27:
+#         break
+# cap.release()
+# cv2.destroyAllWindows()
