@@ -1,10 +1,10 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Date    : 2018-03-21
 # @Author  : Joe
 
 import numpy as np
-import cv2
+import cv2 
+import glob
 
 # Camera Calibration
 # Goal
@@ -51,4 +51,84 @@ import cv2
 	# 好的结果，我们需要至少10个测试模式。
 
 # Code
-	# 
+	# 上面已经提到过了，我们需要至少10个测试模式来校准摄像机。OpenCV提供
+	 # 了一些国际象棋棋盘的图像，我们可以利用这些图片。为了更好的理解，我
+	 # 们只考虑棋盘的一张图片。摄像机校准中所需要的重要的数据集就是一系列
+	 # 的真实世界中3D的点以及其对应的在图片中的2D的点。2D图像中的点可以从
+	 # 图片中很容易的找到。（这些图像点就是在棋盘中两个黑色放开互联的地方）
+
+	 # 那么怎么找到真实世界中的3D的点呢？这些图片是采用静止不动的相机拍摄，
+	 # 然后棋盘放置在不同的地方和朝向的。所以我们需要知道(X,Y,Z)的值。但是
+	 # 简单来说，我们可以说棋盘是保持在XY平面不动的，(所以Z一直=0)而摄像机
+	 # 是相应的移动。这样的考虑可以帮助我们仅仅得到了X,Y的值。现在对于X,Y
+	 # 值来说，我们可以简单的传入(0,0),(1,0),(2,0),....等表示点位置的值。
+	 # 在这种情况下，我们得到的值将会是棋盘方块的缩放值。但是如果我们已经知
+	 # 道方块的大小，（比如30mm），然后我们可以传入(0,0),(30,0),(60,0)..
+	 # 等值，我们获得的结果也是mm单位的。（在现在的情况下，我们不知道方块的
+	 # 大小，所以我们传入在某些条件下的方块大小）。
+
+	 # 3D点被称为 object points（对象点）,2D图像点被称为image points(图像点)
+
+# Setup
+	# 所以要找到棋盘的模式，我们需要使用函数，cv.findChessboardCorners().
+	# 我们当然也需要传入我们在查找的模式类型，如8x8方格，5x5方格等。在这个例
+	# 子中，我们使用7x6方格。（通常棋盘有8x8个方块和7x7个内角点）。它将返回
+	# 角点和标记值如果是True表示模式已经获得了。而这些角点将会被排序（从左到
+	# 右，从上到下）。
+
+	# see also
+		# 这个函数也是不能在所有的图片中找到需要的模式。所以一个比较好的选择
+		# 是这样做，启动相机然后在每帧中检查需要的模式。一旦获得了模式，找到
+		# 角点并将角点存入一个列表中。也要在读入下一帧之前提供一些回馈值所以
+		# 我们能判断棋盘是在不同的方向。继续这样的操作直到获得了所需要的那些
+		# 好的模式。即使在我们现在的例子中，我们也不能确定在给予的14张图片中，
+		# 有多少是很好的图片。所以我们需要读入所有的图片然后取那些较好的图片使用。
+
+		# 除了棋盘以为，我们也可以使用环形格子，但是需要使用函数cv.findCirclesGrid()
+		# 来找到模式。事实表明使用环形格子的时候不需要很多的图片。
+
+# 一旦我们找到了角点，就可以使用cv.cornerSubPix()来提高他们的精确度。我们也
+# 可以使用cv.drawChessboardCorners()来绘制模式。如下：
+
+# termination criteria
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+
+# prepare object points, like(0,0,0) (1,0,0)(2,0,0)...(6,5,0)
+objp = np.zeros((6*7, 3), np.float32)
+objp[:,:2] = np.mgrid[0:7,0:6].T.reshape(-1,2)
+
+# arrays to store object points and 
+# image points from all the images
+objpoints =[] # 3d points in read world space
+imgpoints =[] # 2d points in image space
+
+images = glob.glob('*.jpg')
+
+for fname in images:
+	img = cv2.imread(fname)
+	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+	# find the chess board corners
+	ret, corners = cv2.findChessboardCorners(gray, (7,6), None)
+
+	# if found, add object points, image points(after refining them)
+	if ret == True:
+		objpoints.append(objp)
+		corners2 = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
+		imgpoints.append(corners)
+		#ret_1, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints,gray.shape[::-1],None,None)
+		#h,w = img.shape[:2]
+		#print(img.shape[:2])
+		#newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx,dist,(w,h),1,(w,h))
+		#dst = cv2.undistort(img,mtx,dist,None, newcameramtx)
+		#x,y,w,h=roi
+		#print(roi)
+		#dst = dst[y:y+h,x:x+w]
+		#print(dst)
+		# draw and display the corners
+		cv2.drawChessboardCorners(img, (7,6), corners2, ret)
+		cv2.imshow('img',img)
+		#cv2.imshow('dst',dst)
+		cv2.waitKey(5000)
+
+cv2.destroyAllWindows()
