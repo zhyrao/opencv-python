@@ -104,6 +104,8 @@ imgpoints =[] # 2d points in image space
 
 images = glob.glob('*.jpg')
 
+cameraInfo =[]
+
 for fname in images:
 	img = cv2.imread(fname)
 	print(fname)
@@ -118,6 +120,7 @@ for fname in images:
 		corners2 = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
 		imgpoints.append(corners)
 		ret_1, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints,gray.shape[::-1],None,None)
+		np.savez('B.npz', mtx=mtx,dist=dist,rvecs=rvecs,tvecs=tvecs)
 		h,w = img.shape[:2]
 		#print(img.shape[:2])
 		newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx,dist,(w,h),1,(w,h))
